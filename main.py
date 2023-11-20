@@ -4,6 +4,8 @@ from tempfile import NamedTemporaryFile
 import streamlit as st
 # from faster_whisper import WhisperModel
 from googletrans import Translator
+import nltk
+
 
 
 
@@ -25,25 +27,33 @@ if audio is not None:
     st.write(f"Temporary audio file saved at: {temp_audio_path}")
 
         
-    # tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2")
+    tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2")
 
     model = whisper.load_model("base")
     result = model.transcribe(temp_audio_path)
     print(result["text"])
+    fin=[]
+    sentences = result["text"]
     translator = Translator()
-    conv=translator.translate(result["text"], dest='hi')
+    # for sentence in sentences:
+    #     conv=translator.translate(result, dest='fr')
+    #     fin+=conv.pronunciation
+
+
+    
+    conv=translator.translate(sentences, dest='fr')
     print(conv)
-    st.write(conv.pronunciation)
+    st.write(conv.text)
 
     
 
 
         
-    # tts.tts_to_file(
-    #         text="What should i say, All is fine.",
-    #         file_path="output.wav",
-    #         speaker_wav=temp_audio_path,
-    #         language="en"
-    #     )
+    tts.tts_to_file(
+            text=conv.text,
+            file_path="output.wav",
+            speaker_wav=temp_audio_path,
+            language="fr"
+        )
 
-    # st.audio("output.wav", format="audio/wav")
+    st.audio("output.wav", format="audio/wav")  
