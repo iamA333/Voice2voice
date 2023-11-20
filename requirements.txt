@@ -1,0 +1,4 @@
+streamlit
+openai-whisper
+TTS
+googletrans==3.1.0a0
